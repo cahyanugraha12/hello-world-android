@@ -1,4 +1,4 @@
-package com.example.helloworldandroid
+package id.ac.ui.cs.mobileprogramming.cahyanugraha.helloworld
 
 import org.junit.Test
 

@@ -1,10 +1,9 @@
-package com.example.helloworldandroid
+package id.ac.ui.cs.mobileprogramming.cahyanugraha.helloworld
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
-import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
     var currentTotal: Int = 0
