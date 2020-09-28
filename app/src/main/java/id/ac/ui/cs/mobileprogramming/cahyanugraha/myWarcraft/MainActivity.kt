@@ -8,10 +8,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.squareup.picasso.Picasso
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var profileImageView: ImageView
-    private lateinit var profileImageShowButton: Button
-    private lateinit var profileImageCloseButton: Button
-
+    lateinit var profileImageView: ImageView
+    lateinit var profileImageShowButton: Button
+    lateinit var profileImageCloseButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,22 +21,22 @@ class MainActivity : AppCompatActivity() {
         this.profileImageCloseButton = findViewById(R.id.profileImageCloseButton)
 
         this.profileImageShowButton.setOnClickListener {
-            onClickProfileImageShowButton()
+            val profileImageURL: String = "https://render-us.worldofwarcraft.com/character/nagrand/110/193182574-main.jpg"
+            Picasso.get().load(profileImageURL).into(this.profileImageView)
+            showImageView()
         }
         this.profileImageCloseButton.setOnClickListener {
-            onClickProfileImageCloseButton()
+            closeImageView()
         }
     }
 
-    private fun onClickProfileImageShowButton() {
-        val profileImageURL: String = "https://render-us.worldofwarcraft.com/character/nagrand/110/193182574-main.jpg"
-        Picasso.get().load(profileImageURL).into(this.profileImageView)
+    fun showImageView() {
         this.profileImageView.visibility = View.VISIBLE
         this.profileImageCloseButton.visibility = View.VISIBLE
         this.profileImageShowButton.visibility = View.GONE
     }
 
-    private fun onClickProfileImageCloseButton() {
+    fun closeImageView() {
         this.profileImageView.visibility = View.GONE
         this.profileImageCloseButton.visibility = View.GONE
         this.profileImageShowButton.visibility = View.VISIBLE
