@@ -1,6 +1,11 @@
 <resources>
     <string name="app_name">My Warcraft</string>
+    <string name="goToMainActivityButtonText">Go To Main Activity</string>
+    <string name="goToTimerActivityButtonText">Go To Timer Activity</string>
     <string name="profile_image_content_description">My Profile Image</string>
     <string name="profile_image_show_button_text">Click to show Profile Image</string>
     <string name="profile_image_close_button_text">Click to close Profile Image</string>
+    <string name="main_activity_on_back_pressed_title">Are you sure you want to exit?</string>
+    <string name="main_activity_on_back_pressed_ok">Yes, I\'m sure</string>
+    <string name="main_activity_on_back_pressed_cancel">No</string>
 </resources>
