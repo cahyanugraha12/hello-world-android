@@ -46,7 +46,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        println("PRESSED!")
         val alertBuilder = AlertDialog.Builder(this)
         alertBuilder.apply {
             setTitle(R.string.main_activity_on_back_pressed_title)
