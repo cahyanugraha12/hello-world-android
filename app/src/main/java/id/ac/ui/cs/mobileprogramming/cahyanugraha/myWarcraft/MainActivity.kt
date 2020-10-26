@@ -1,44 +1,92 @@
 package id.ac.ui.cs.mobileprogramming.cahyanugraha.myWarcraft
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.location.Location
 import android.os.Bundle
-import android.view.View
 import android.widget.Button
-import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.squareup.picasso.Picasso
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 
 class MainActivity : AppCompatActivity() {
-    lateinit var profileImageView: ImageView
-    lateinit var profileImageShowButton: Button
-    lateinit var profileImageCloseButton: Button
+    private lateinit var showLocationButton: Button
+    lateinit var locationTextView: TextView
+    lateinit var fusedLocationClient: FusedLocationProviderClient
+    private val ACCESS_LOCATION_REQUEST_CODE: Int = 1204
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        this.profileImageView = findViewById(R.id.profileImage)
-        this.profileImageShowButton = findViewById(R.id.profileImageShowButton)
-        this.profileImageCloseButton = findViewById(R.id.profileImageCloseButton)
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
-        this.profileImageShowButton.setOnClickListener {
-            val profileImageURL: String = "https://render-us.worldofwarcraft.com/character/nagrand/110/193182574-main.jpg"
-            Picasso.get().load(profileImageURL).into(this.profileImageView)
-            showImageView()
-        }
-        this.profileImageCloseButton.setOnClickListener {
-            closeImageView()
+        this.showLocationButton = findViewById(R.id.showLocationButton)
+        this.locationTextView = findViewById(R.id.locationTextView)
+
+        this.showLocationButton.setOnClickListener {
+            getLocation()
         }
     }
 
-    fun showImageView() {
-        this.profileImageView.visibility = View.VISIBLE
-        this.profileImageCloseButton.visibility = View.VISIBLE
-        this.profileImageShowButton.visibility = View.GONE
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        when (requestCode) {
+            ACCESS_LOCATION_REQUEST_CODE -> {
+                if (grantResults.isNotEmpty()
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED
+                    && grantResults[1] == PackageManager.PERMISSION_GRANTED
+                ) {
+                    getLocation()
+                } else {
+                    Toast
+                        .makeText(this, "Permissions to check location are not granted!", Toast.LENGTH_SHORT)
+                        .show()
+                }
+                return
+            }
+        }
     }
 
-    fun closeImageView() {
-        this.profileImageView.visibility = View.GONE
-        this.profileImageCloseButton.visibility = View.GONE
-        this.profileImageShowButton.visibility = View.VISIBLE
+    private fun getLocation() {
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                Array<String>(2) {
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                },
+                ACCESS_LOCATION_REQUEST_CODE)
+        } else {
+            fusedLocationClient.lastLocation
+                .addOnSuccessListener { location: Location? ->
+                    if (location != null) {
+                        val loc = "Latitude: "
+                            .plus(location.latitude.toString())
+                            .plus(" | Longitude: ")
+                            .plus(location.longitude.toString())
+                        locationTextView.text = loc
+                    } else {
+                        Toast
+                            .makeText(this, "Cannot get last location coordinates.", Toast.LENGTH_SHORT)
+                            .show()
+                        locationTextView.text = "Unknown"
+                    }
+                }
+        }
     }
 }
