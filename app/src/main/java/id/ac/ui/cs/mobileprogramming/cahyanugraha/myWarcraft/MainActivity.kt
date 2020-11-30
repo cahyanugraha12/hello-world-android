@@ -1,44 +1,92 @@
 package id.ac.ui.cs.mobileprogramming.cahyanugraha.myWarcraft
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.net.wifi.WifiManager
 import android.os.Bundle
-import android.view.View
-import android.widget.Button
-import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.squareup.picasso.Picasso
+import id.ac.ui.cs.mobileprogramming.cahyanugraha.myWarcraft.databinding.ActivityMainBinding
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity() {
-    lateinit var profileImageView: ImageView
-    lateinit var profileImageShowButton: Button
-    lateinit var profileImageCloseButton: Button
+
+    private lateinit var binding: ActivityMainBinding
+    private val wifiScanReceiver: WifiScanReceiver = WifiScanReceiver()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
-        this.profileImageView = findViewById(R.id.profileImage)
-        this.profileImageShowButton = findViewById(R.id.profileImageShowButton)
-        this.profileImageCloseButton = findViewById(R.id.profileImageCloseButton)
+        val wifiManager = applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
 
-        this.profileImageShowButton.setOnClickListener {
-            val profileImageURL: String = "https://render-us.worldofwarcraft.com/character/nagrand/110/193182574-main.jpg"
-            Picasso.get().load(profileImageURL).into(this.profileImageView)
-            showImageView()
-        }
-        this.profileImageCloseButton.setOnClickListener {
-            closeImageView()
+        val intentFilter = IntentFilter()
+        intentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)
+        registerReceiver(wifiScanReceiver, intentFilter)
+
+        binding.buttonScanWifi.setOnClickListener {
+            val wifiScanSuccess = wifiManager.startScan()
+            if (wifiScanSuccess) {
+                Toast
+                    .makeText(this, "Scanning for WIFI, please wait.", Toast.LENGTH_LONG)
+                    .show()
+            } else {
+                Toast
+                    .makeText(this, "Failed to scan for WIFI.", Toast.LENGTH_LONG)
+                    .show()
+            }
         }
     }
 
-    fun showImageView() {
-        this.profileImageView.visibility = View.VISIBLE
-        this.profileImageCloseButton.visibility = View.VISIBLE
-        this.profileImageShowButton.visibility = View.GONE
+    override fun onStop() {
+        super.onStop()
+        unregisterReceiver(wifiScanReceiver)
     }
 
-    fun closeImageView() {
-        this.profileImageView.visibility = View.GONE
-        this.profileImageCloseButton.visibility = View.GONE
-        this.profileImageShowButton.visibility = View.VISIBLE
+    inner class WifiScanReceiver: BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            val wifiManager = context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+            val listOfWifiNames = wifiManager.scanResults.map {
+                it.SSID
+            }
+            if (listOfWifiNames.isNotEmpty()) {
+                binding.textViewScanResult.text = listOfWifiNames.toString()
+            }
+
+            val pipedreamAPI = Retrofit.Builder()
+                .baseUrl("https://en5vl1141xhb5q2.m.pipedream.net")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(PipedreamAPI::class.java)
+            Toast
+                .makeText(context, "Sending WIFI scan result to Pipedream!", Toast.LENGTH_LONG)
+                .show()
+            pipedreamAPI.postWifiScanResultToPipedream(listOfWifiNames).enqueue(
+                object: Callback<Void> {
+                    override fun onFailure(call: Call<Void>, t: Throwable) {
+                        Toast
+                            .makeText(
+                                context,
+                                "Failed to send WIFI scan result, error: ".plus(t.message),
+                                Toast.LENGTH_LONG
+                            ).show()
+                    }
+
+                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                        Toast
+                            .makeText(context, "WIFI scan result sent!", Toast.LENGTH_LONG)
+                            .show()
+                    }
+                }
+            )
+        }
     }
 }
