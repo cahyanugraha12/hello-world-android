@@ -9,16 +9,16 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import id.ac.ui.cs.mobileprogramming.cahyanugraha.myWarcraft.databinding.ActivityMainBinding
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var wifiScanReceiver: WifiScanReceiver
+    private val wifiScanReceiver: WifiScanReceiver = WifiScanReceiver()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,7 +28,6 @@ class MainActivity : AppCompatActivity() {
 
         val wifiManager = applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
 
-        val wifiScanReceiver = WifiScanReceiver()
         val intentFilter = IntentFilter()
         intentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)
         registerReceiver(wifiScanReceiver, intentFilter)
@@ -70,9 +69,24 @@ class MainActivity : AppCompatActivity() {
             Toast
                 .makeText(context, "Sending WIFI scan result to Pipedream!", Toast.LENGTH_LONG)
                 .show()
-            GlobalScope.launch(Dispatchers.IO) {
-                pipedreamAPI.postWifiScanResultToPipedream(listOfWifiNames).execute()
-            }
+            pipedreamAPI.postWifiScanResultToPipedream(listOfWifiNames).enqueue(
+                object: Callback<Void> {
+                    override fun onFailure(call: Call<Void>, t: Throwable) {
+                        Toast
+                            .makeText(
+                                context,
+                                "Failed to send WIFI scan result, error: ".plus(t.message),
+                                Toast.LENGTH_LONG
+                            ).show()
+                    }
+
+                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                        Toast
+                            .makeText(context, "WIFI scan result sent!", Toast.LENGTH_LONG)
+                            .show()
+                    }
+                }
+            )
         }
     }
 }
