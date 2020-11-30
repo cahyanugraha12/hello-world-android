@@ -5,38 +5,26 @@
     android:id="@+id/mainLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFFFFF"
     tools:context="id.ac.ui.cs.mobileprogramming.cahyanugraha.myWarcraft.MainActivity">
 
     <Button
-        android:id="@+id/profileImageShowButton"
+        android:id="@+id/button_scan_wifi"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/profile_image_show_button_text"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="@+id/mainLayout"
-        app:layout_constraintStart_toStartOf="@+id/mainLayout"
-        app:layout_constraintTop_toTopOf="@+id/mainLayout" />
+        android:text="Scan for WIFI"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/profileImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/profile_image_content_description"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="@+id/mainLayout"
-        app:layout_constraintStart_toStartOf="@+id/mainLayout"
-        app:layout_constraintTop_toTopOf="@+id/mainLayout" />
-
-    <Button
-        android:id="@+id/profileImageCloseButton"
+    <TextView
+        android:id="@+id/text_view_scan_result"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="@string/profile_image_close_button_text"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="@+id/mainLayout"
-        app:layout_constraintStart_toStartOf="@+id/mainLayout"
-        app:layout_constraintTop_toBottomOf="@+id/profileImage" />
-
+        android:text="No result!"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_scan_wifi" />
 </androidx.constraintlayout.widget.ConstraintLayout>
