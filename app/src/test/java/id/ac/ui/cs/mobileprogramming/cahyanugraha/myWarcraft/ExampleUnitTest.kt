@@ -1,4 +1,4 @@
-package id.ac.ui.cs.mobileprogramming.cahyanugraha.helloworld
+package id.ac.ui.cs.mobileprogramming.cahyanugraha.myWarcraft
 
 import org.junit.Test
 

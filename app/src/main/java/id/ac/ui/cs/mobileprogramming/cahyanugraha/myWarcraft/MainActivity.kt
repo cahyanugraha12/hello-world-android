@@ -1,14 +1,19 @@
-package id.ac.ui.cs.mobileprogramming.cahyanugraha.helloworld
+package id.ac.ui.cs.mobileprogramming.cahyanugraha.myWarcraft
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
+import kotlinx.android.synthetic.main.activity_main.*
+import org.w3c.dom.Text
 
 class MainActivity : AppCompatActivity() {
-    var currentTotal: Int = 0
-    var currentNumberInString: String = ""
-    var prevOp: String = "<>"
+    private var currentTotal: Int = 0
+    private var currentNumberInString: String = ""
+    private var prevOp: String = "<>"
+
+    private external fun nativeAdd(first: Int, second: Int): Int
+    private external fun nativeSubtract(first: Int, second: Int): Int
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +52,12 @@ class MainActivity : AppCompatActivity() {
         setOpButtonOnClickListener(findViewById(R.id.op_plus), "+")
         setOpButtonOnClickListener(findViewById(R.id.op_minus), "-")
         setOpButtonOnClickListener(findViewById(R.id.op_result), "=")
+        findViewById<Button>(R.id.op_clear).setOnClickListener {
+            currentTotal = 0
+            currentNumberInString = ""
+            prevOp = "<>"
+            findViewById<TextView>(R.id.calc_display).text = ""
+        }
     }
 
     private fun setOpButtonOnClickListener(button: Button, op: String) {
@@ -56,10 +67,10 @@ class MainActivity : AppCompatActivity() {
             // Process previous operation
             when (this.prevOp) {
                 "+" ->  {
-                    this.currentTotal += calcDisplay.text.toString().toInt()
+                    this.currentTotal = nativeAdd(this.currentTotal, calcDisplay.text.toString().toInt())
                 }
                 "-" -> {
-                    this.currentTotal -= calcDisplay.text.toString().toInt()
+                    this.currentTotal = nativeSubtract(this.currentTotal, calcDisplay.text.toString().toInt())
                 }
                 // <> indicate reset. That is, no operation so just store the displayed text as is.
                 "<>" -> {
@@ -76,6 +87,13 @@ class MainActivity : AppCompatActivity() {
             }
 
             this.currentNumberInString = ""
+        }
+    }
+
+    companion object {
+        // Used to load the 'native-lib' library on application startup.
+        init {
+            System.loadLibrary("native_math")
         }
     }
 }
