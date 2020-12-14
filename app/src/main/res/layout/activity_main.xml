@@ -1,42 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/mainLayout"
+    android:id="@+id/scrollLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="id.ac.ui.cs.mobileprogramming.cahyanugraha.myWarcraft.MainActivity">
+    tools:context="id.ac.ui.cs.mobileprogramming.cahyanugraha.myWarcraft.MainActivity" >
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/mainLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <Button
-        android:id="@+id/profileImageShowButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/profile_image_show_button_text"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="@+id/mainLayout"
-        app:layout_constraintStart_toStartOf="@+id/mainLayout"
-        app:layout_constraintTop_toTopOf="@+id/mainLayout" />
+        <ImageView
+            android:id="@+id/imageViewMonk"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/description_image_view_monk"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/profileImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/profile_image_content_description"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="@+id/mainLayout"
-        app:layout_constraintStart_toStartOf="@+id/mainLayout"
-        app:layout_constraintTop_toTopOf="@+id/mainLayout" />
+        <ImageView
+            android:id="@+id/imageViewDK"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/description_image_view_dk"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageViewMonk" />
 
-    <Button
-        android:id="@+id/profileImageCloseButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/profile_image_close_button_text"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="@+id/mainLayout"
-        app:layout_constraintStart_toStartOf="@+id/mainLayout"
-        app:layout_constraintTop_toBottomOf="@+id/profileImage" />
+        <ImageView
+            android:id="@+id/imageViewMage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/description_image_view_mage"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageViewDK" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <ImageView
+            android:id="@+id/imageViewShaman"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/description_image_view_shaman"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageViewMage" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

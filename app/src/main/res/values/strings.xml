@@ -1,6 +1,7 @@
 <resources>
-    <string name="app_name">My Warcraft</string>
-    <string name="profile_image_content_description">My Profile Image</string>
-    <string name="profile_image_show_button_text">Click to show Profile Image</string>
-    <string name="profile_image_close_button_text">Click to close Profile Image</string>
+    <string name="app_name">MyWarcraft</string>
+    <string name="description_image_view_monk">Image of a Pandaren Monk</string>
+    <string name="description_image_view_dk">Image of a Pandaren Death Knight</string>
+    <string name="description_image_view_mage">Image of a Pandaren Mage</string>
+    <string name="description_image_view_shaman">Image of a Pandaren Shaman</string>
 </resources>
